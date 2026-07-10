@@ -1,0 +1,10 @@
+{
+  "project_id": "11111111-1111-1111-1111-111111111111",
+  "current_stage": "generating_assets",
+  "progress": {
+    "completed": 4,
+    "total": 10,
+    "percentage": 40
+  },
+  "message": "正在生成角色、场景和道具参考图。"
+}

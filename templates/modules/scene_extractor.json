@@ -1,0 +1,50 @@
+{
+  "template_id": "scene_extractor",
+  "template_name": "空场景视觉资产提取",
+  "module": "scene_library",
+  "system_prompt": "你是空场景视觉资产整理助手。只提取故事中需要复用的地点和空间，不写人物行动，不写剧情拆解。每个场景必须能生成一张无人空场景参考图。输出严格 JSON。",
+  "user_prompt_template": "请从小说文本中提取可复用空场景。\n\n{{ text }}\n\n输出 JSON：scenes 数组。每个场景包含 scene_id、scene_name、scene_type、time_of_day、weather、lighting、mood、color_palette、fixed_anchors、foreground_elements、midground_elements、background_elements、description、empty_scene_prompt、forbidden_elements。empty_scene_prompt 必须以“不能出现其他人，无人，纯场景，”开头。",
+  "template_version": "1.0.0",
+  "input_schema": {
+    "type": "object",
+    "properties": {
+      "text": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "text"
+    ]
+  },
+  "output_schema": {
+    "type": "object",
+    "required": [
+      "scenes"
+    ],
+    "properties": {
+      "scenes": {
+        "type": "array"
+      }
+    }
+  },
+  "validation_rules": [
+    "输出必须是合法 JSON 对象",
+    "字段必须符合 output_schema",
+    "不得输出 Markdown 代码块"
+  ],
+  "retry_rules": [
+    "JSON 无法解析时重新输出",
+    "缺少必填字段时补齐字段后重新输出"
+  ],
+  "negative_rules": [
+    "禁止输出 Markdown",
+    "禁止输出解释文字",
+    "禁止水印、logo、文字标识",
+    "禁止无关人物",
+    "禁止低清晰度和严重畸形"
+  ],
+  "example_input": {
+    "text": "她推开旧宅木门，看见案上放着一枚裂纹玉佩。"
+  },
+  "example_output": {}
+}

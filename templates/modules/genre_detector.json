@@ -1,0 +1,89 @@
+{
+  "template_id": "genre_detector",
+  "template_name": "小说视觉类型识别",
+  "module": "analysis",
+  "system_prompt": "你是小说视觉资产分析助手。只判断文本最适合的视觉风格，不做改写，不拆剧情，不生成后续制作方案。可选 style_id 只能是 cinematic_realistic、urban_drama、chinese_ancient、xianxia、sci_fi、cyberpunk。输出严格 JSON。",
+  "user_prompt_template": "请分析以下小说文本，选择最适合后续角色图、空场景图、道具图生成的视觉风格。\n\n{{ text }}\n\n只输出 JSON，字段：genre、style_id、confidence、reason、sub_genres、style_tags、fallback_styles。",
+  "template_version": "1.0.0",
+  "input_schema": {
+    "type": "object",
+    "properties": {
+      "text": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "text"
+    ]
+  },
+  "output_schema": {
+    "type": "object",
+    "required": [
+      "genre",
+      "style_id",
+      "confidence",
+      "reason",
+      "style_tags"
+    ],
+    "properties": {
+      "genre": {
+        "type": "string"
+      },
+      "style_id": {
+        "type": "string",
+        "enum": [
+          "cinematic_realistic",
+          "urban_drama",
+          "chinese_ancient",
+          "xianxia",
+          "sci_fi",
+          "cyberpunk"
+        ]
+      },
+      "confidence": {
+        "type": "number"
+      },
+      "reason": {
+        "type": "string"
+      },
+      "sub_genres": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "style_tags": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "fallback_styles": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "validation_rules": [
+    "输出必须是合法 JSON 对象",
+    "字段必须符合 output_schema",
+    "不得输出 Markdown 代码块"
+  ],
+  "retry_rules": [
+    "JSON 无法解析时重新输出",
+    "缺少必填字段时补齐字段后重新输出"
+  ],
+  "negative_rules": [
+    "禁止输出 Markdown",
+    "禁止输出解释文字",
+    "禁止水印、logo、文字标识",
+    "禁止无关人物",
+    "禁止低清晰度和严重畸形"
+  ],
+  "example_input": {
+    "text": "她推开旧宅木门，看见案上放着一枚裂纹玉佩。"
+  },
+  "example_output": {}
+}

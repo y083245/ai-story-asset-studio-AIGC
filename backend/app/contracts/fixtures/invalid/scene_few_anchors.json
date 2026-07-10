@@ -1,0 +1,18 @@
+{
+  "scene_id": "SC_001",
+  "scene_name": "Too Few Anchors",
+  "scene_type": "interior",
+  "time_of_day": "白天",
+  "weather": "晴",
+  "lighting": "自然光",
+  "mood": "平静",
+  "color_palette": ["白"],
+  "fixed_anchors": ["桌子", "椅子"],
+  "foreground_elements": [],
+  "midground_elements": [],
+  "background_elements": [],
+  "composition_views": [],
+  "forbidden_elements": [],
+  "scene_prompt": "test",
+  "empty_scene_prompt": "test"
+}

@@ -1,0 +1,63 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://story-asset-studio.dev/schemas/workflow_status.schema.json",
+  "title": "Workflow Status",
+  "description": "Status snapshot for analysis and image asset generation workflows.",
+  "type": "object",
+  "required": [
+    "project_id",
+    "current_stage",
+    "progress",
+    "message"
+  ],
+  "properties": {
+    "project_id": {
+      "type": "string",
+      "description": "UUID string."
+    },
+    "current_stage": {
+      "type": "string",
+      "enum": [
+        "uploaded",
+        "analyzing",
+        "cleaning_text",
+        "detecting_genre",
+        "extracting_characters",
+        "extracting_scenes",
+        "extracting_props",
+        "building_story_bible",
+        "analysis_confirmed",
+        "generating_assets",
+        "checking_image_quality",
+        "completed",
+        "failed",
+        "cancelled"
+      ]
+    },
+    "progress": {
+      "type": "object",
+      "required": [
+        "completed",
+        "total",
+        "percentage"
+      ],
+      "properties": {
+        "completed": {
+          "type": "integer"
+        },
+        "total": {
+          "type": "integer"
+        },
+        "percentage": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 100
+        }
+      }
+    },
+    "message": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": false
+}

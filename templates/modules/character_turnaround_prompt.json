@@ -1,0 +1,50 @@
+{
+  "template_id": "character_turnaround_prompt",
+  "template_name": "角色三视图提示词",
+  "module": "image_asset",
+  "system_prompt": "一张高精度、干净极简的角色设定板/人物三视图参考页，纯白背景，整体像专业角色建模设定图，排版整齐清晰，统一光线、统一人物一致性。\n画面左侧为人物全身三视图，占据主要视觉区域，分别展示：\n1. 正面全身站姿\n2. 左侧面全身站姿\n3. 背面全身站姿\n三个人物必须是同一个角色，五官、发型、服装、体型、身高比例完全一致，站姿自然，双臂自然下垂，平视视角，中性棚拍光，无遮挡，无夸张透视，无复杂背景。\n画面右侧分为上下两个板块：\n右上区域放置六张人物头像/头部视角图：正面头像、低头头顶角度、后脑勺、左侧轮廓、正侧脸对照、3/4侧脸头像。\n右下区域放置六张局部细节图：上衣面料、下身正面局部、背部剪裁、腿部或皮肤细节、眼部或五官细节、鞋子单品。\n整体风格：极简、专业、写实、统一、干净、高级、角色设定板、人物边缘清晰、服装版型明确、发丝自然、皮肤细腻、材质表现准确。\n人物设定:\n【人物形象描述]\n输出要求:\n横版构图，白底，完整人物，不裁切，不出现多余道具，不出现文字说明，不出现LOGO，不出现水印，不出现UI界面元素。",
+  "user_prompt_template": "请把以下人物设定转换为可直接用于角色三视图参考图的提示词，只输出 JSON：{\"turnaround_prompt\":\"...\"}\n\n{{ text }}",
+  "template_version": "1.0.0",
+  "input_schema": {
+    "type": "object",
+    "properties": {
+      "text": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "text"
+    ]
+  },
+  "output_schema": {
+    "type": "object",
+    "required": [
+      "turnaround_prompt"
+    ],
+    "properties": {
+      "turnaround_prompt": {
+        "type": "string"
+      }
+    }
+  },
+  "validation_rules": [
+    "输出必须是合法 JSON 对象",
+    "字段必须符合 output_schema",
+    "不得输出 Markdown 代码块"
+  ],
+  "retry_rules": [
+    "JSON 无法解析时重新输出",
+    "缺少必填字段时补齐字段后重新输出"
+  ],
+  "negative_rules": [
+    "禁止输出 Markdown",
+    "禁止输出解释文字",
+    "禁止水印、logo、文字标识",
+    "禁止无关人物",
+    "禁止低清晰度和严重畸形"
+  ],
+  "example_input": {
+    "text": "她推开旧宅木门，看见案上放着一枚裂纹玉佩。"
+  },
+  "example_output": {}
+}

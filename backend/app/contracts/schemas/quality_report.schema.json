@@ -1,0 +1,97 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://story-asset-studio.dev/schemas/quality_report.schema.json",
+  "title": "Quality Report",
+  "description": "A quality-check report for a generated image asset.",
+  "type": "object",
+  "required": [
+    "report_id",
+    "project_id",
+    "quality_score",
+    "retry_required",
+    "created_at"
+  ],
+  "properties": {
+    "report_id": {
+      "type": "string",
+      "description": "UUID string."
+    },
+    "project_id": {
+      "type": "string",
+      "description": "UUID string."
+    },
+    "related_id": {
+      "type": "string",
+      "description": "Related character_id, scene_id, or prop_id."
+    },
+    "asset_id": {
+      "type": "string",
+      "description": "UUID string."
+    },
+    "asset_type": {
+      "type": "string"
+    },
+    "quality_score": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1
+    },
+    "face_consistency_score": {
+      "type": [
+        "number",
+        "null"
+      ],
+      "minimum": 0,
+      "maximum": 1
+    },
+    "outfit_consistency_score": {
+      "type": [
+        "number",
+        "null"
+      ],
+      "minimum": 0,
+      "maximum": 1
+    },
+    "scene_consistency_score": {
+      "type": [
+        "number",
+        "null"
+      ],
+      "minimum": 0,
+      "maximum": 1
+    },
+    "prop_presence_score": {
+      "type": [
+        "number",
+        "null"
+      ],
+      "minimum": 0,
+      "maximum": 1
+    },
+    "composition_score": {
+      "type": [
+        "number",
+        "null"
+      ],
+      "minimum": 0,
+      "maximum": 1
+    },
+    "issues": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "retry_required": {
+      "type": "boolean"
+    },
+    "retry_prompt_patch": {
+      "type": "string"
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "additionalProperties": false
+}

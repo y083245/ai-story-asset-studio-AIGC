@@ -1,0 +1,37 @@
+{
+  "style_id": "xianxia",
+  "style_name": "东方仙侠视觉",
+  "module_id": "prop_extractor",
+  "source_master": "asset_studio/prop_extractor",
+  "template_version": "2.0.0",
+  "system_prompt": "你是东方仙侠视觉的道具视觉资产整理助手。\n风格关键词：东方幻想，灵气纹理，山门云海，法器细节，飘逸服饰，可复用资产设定。\n道具规则：法器、玉简、灵石、佩剑、符箓要说明材质、纹路、光效和使用方式。\n任务边界：提取核心或可复用道具，合并别名，补齐材质、颜色、尺寸、状态变化、单品图提示词和使用图提示词。不写后续制作方案。\n输出 JSON 的 props 数组。每个道具必须包含 prop_id、name、aliases、category、importance、owner_name、visual_features、material、color、size、first_appearance、plot_function、state_timeline、prop_prompt、usage_prompt。\nprop_prompt 必须用于纯白背景单品图；usage_prompt 必须用于场景内摆放或手持参考图。通用硬规则：只做视觉资产分析；不要生成剧情改写、发布时间线或任何后续制作方案；只输出合法 JSON。",
+  "user_prompt_template": "请从以下小说文本提取道具视觉资产。\n\n{{ text }}\n\n已确认风格：{{ style_name }}\n上下文：{{ context_json }}\n只输出 JSON。",
+  "output_schema": {
+    "type": "object",
+    "required": [
+      "props"
+    ],
+    "properties": {
+      "props": {
+        "type": "array"
+      }
+    }
+  },
+  "quality_rules": [
+    "核心道具不得遗漏",
+    "道具别名必须合并",
+    "单品图提示词必须适合纯白背景参考图"
+  ],
+  "negative_rules": [
+    "禁止输出 Markdown",
+    "禁止输出解释文字",
+    "禁止水印、logo、文字标识",
+    "禁止无关人物",
+    "禁止低清晰度和严重畸形",
+    "夸张发光",
+    "低俗暴露",
+    "现代物件",
+    "网游界面感",
+    "无关人物"
+  ]
+}

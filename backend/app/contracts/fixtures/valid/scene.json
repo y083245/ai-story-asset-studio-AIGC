@@ -1,0 +1,23 @@
+{
+  "scene_id": "SC_001",
+  "scene_name": "顾氏集团大厦外",
+  "scene_type": "exterior_night",
+  "time_of_day": "夜晚",
+  "weather": "深秋微风",
+  "lighting": "冷白色大厦灯光与暖黄街灯混合",
+  "mood": "寒冷、孤独、决绝",
+  "color_palette": ["深蓝", "冷白", "暖黄"],
+  "fixed_anchors": [
+    "大厦旋转门入口",
+    "门外黑色大理石台阶",
+    "大厦发光LOGO墙面",
+    "两侧景观树和花坛"
+  ],
+  "foreground_elements": ["苏念站立位置", "地面石砖纹理"],
+  "midground_elements": ["旋转门", "台阶", "门卫"],
+  "background_elements": ["大厦玻璃幕墙", "夜晚天空", "远处街景"],
+  "composition_views": ["正面中景构图", "低角度仰拍", "侧面45度"],
+  "forbidden_elements": ["其他人物正面清晰脸", "白天光线"],
+  "scene_prompt": "夜晚，冷白色灯光照射下的现代大厦入口，旋转门反射着街灯的光",
+  "empty_scene_prompt": "夜晚空无一人的现代大厦入口，冷白色灯光，旋转门静止"
+}

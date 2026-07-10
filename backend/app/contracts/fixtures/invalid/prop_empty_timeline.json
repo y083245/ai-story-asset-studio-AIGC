@@ -1,0 +1,14 @@
+{
+  "prop_id": "PR_001",
+  "name": "核心道具缺少状态时间线",
+  "owner_character_id": "CH_001",
+  "first_appearance": "第1幕",
+  "visual_features": "白色文件夹",
+  "material": "纸张",
+  "color": "白色",
+  "size": "A4",
+  "function_in_story": "关键证据",
+  "state_timeline": [],
+  "prop_prompt": "test",
+  "usage_prompt": "test"
+}

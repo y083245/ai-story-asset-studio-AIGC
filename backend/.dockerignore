@@ -1,0 +1,15 @@
+.venv
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+.mypy_cache
+.pytest_cache
+.ruff_cache
+local_storage
+story_engine.egg-info
+tests
+.DS_Store
+.git
+.gitignore
+*.md

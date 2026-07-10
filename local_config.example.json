@@ -1,0 +1,14 @@
+{
+  "text": {
+    "provider_id": "deepseek",
+    "model": "deepseek-v4-flash",
+    "base_url": "https://api.deepseek.com",
+    "api_key": "replace-with-your-text-model-api-key"
+  },
+  "image": {
+    "provider_id": "doubao_seedream",
+    "model": "doubao-seedream-5-0-lite-260128",
+    "base_url": "https://ark.cn-beijing.volces.com/api/v3",
+    "api_key": "replace-with-your-seedream-api-key"
+  }
+}

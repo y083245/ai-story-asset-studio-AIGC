@@ -1,0 +1,140 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://story-asset-studio.dev/schemas/character.schema.json",
+  "title": "Character",
+  "description": "A character extracted from the novel with full visual and personality details.",
+  "type": "object",
+  "required": [
+    "character_id",
+    "name",
+    "role_type",
+    "gender",
+    "age",
+    "height",
+    "body_type",
+    "face_shape",
+    "facial_bone_structure",
+    "skin_tone",
+    "eyes",
+    "eyebrows",
+    "nose",
+    "mouth",
+    "hair_color",
+    "hair_style",
+    "default_outfit",
+    "outfit_details",
+    "personality",
+    "relationship_to_others",
+    "emotion_pack",
+    "forbidden_changes",
+    "reference_image_plan"
+  ],
+  "properties": {
+    "character_id": {
+      "type": "string",
+      "pattern": "^CH_\\d{3}$",
+      "description": "Stable character ID, e.g. CH_001."
+    },
+    "name": {
+      "type": "string",
+      "minLength": 1
+    },
+    "aliases": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "role_type": {
+      "type": "string",
+      "description": "E.g. protagonist, antagonist, supporting."
+    },
+    "gender": {
+      "type": "string"
+    },
+    "age": {
+      "type": "string"
+    },
+    "height": {
+      "type": "string"
+    },
+    "body_type": {
+      "type": "string"
+    },
+    "face_shape": {
+      "type": "string",
+      "minLength": 1
+    },
+    "facial_bone_structure": {
+      "type": "string"
+    },
+    "skin_tone": {
+      "type": "string"
+    },
+    "eyes": {
+      "type": "string"
+    },
+    "eyebrows": {
+      "type": "string"
+    },
+    "nose": {
+      "type": "string"
+    },
+    "mouth": {
+      "type": "string"
+    },
+    "hair_color": {
+      "type": "string",
+      "minLength": 1
+    },
+    "hair_style": {
+      "type": "string",
+      "minLength": 1
+    },
+    "default_outfit": {
+      "type": "string",
+      "minLength": 1
+    },
+    "outfit_details": {
+      "type": "string"
+    },
+    "personality": {
+      "type": "string"
+    },
+    "relationship_to_others": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "emotion_pack": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Key emotions the character expresses."
+    },
+    "forbidden_changes": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Visual traits that must never change across generated assets."
+    },
+    "reference_image_plan": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Planned reference image types (e.g. front-half-body, profile, full-body)."
+    },
+    "reference_assets": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "URLs or paths to generated reference images."
+    }
+  },
+  "additionalProperties": false
+}

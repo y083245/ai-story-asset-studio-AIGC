@@ -1,0 +1,80 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://story-asset-studio.dev/schemas/scene.schema.json",
+  "title": "Scene",
+  "description": "A reusable location extracted from the novel with fixed spatial anchors.",
+  "type": "object",
+  "required": [
+    "scene_id",
+    "scene_name",
+    "scene_type",
+    "time_of_day",
+    "weather",
+    "lighting",
+    "mood",
+    "color_palette",
+    "fixed_anchors",
+    "foreground_elements",
+    "midground_elements",
+    "background_elements",
+    "composition_views",
+    "forbidden_elements",
+    "scene_prompt",
+    "empty_scene_prompt"
+  ],
+  "properties": {
+    "scene_id": {
+      "type": "string",
+      "pattern": "^SC_\\d{3}$",
+      "description": "Stable scene ID, e.g. SC_001."
+    },
+    "scene_name": { "type": "string", "minLength": 1 },
+    "scene_type": {
+      "type": "string",
+      "description": "E.g. interior, exterior, day, night."
+    },
+    "time_of_day": { "type": "string" },
+    "weather": { "type": "string" },
+    "lighting": { "type": "string" },
+    "mood": { "type": "string" },
+    "color_palette": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "fixed_anchors": {
+      "type": "array",
+      "minItems": 3,
+      "items": { "type": "string" },
+      "description": "Fixed spatial anchors that define the scene. At least 3 required."
+    },
+    "foreground_elements": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "midground_elements": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "background_elements": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "composition_views": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "forbidden_elements": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "scene_prompt": {
+      "type": "string",
+      "description": "Image-generation prompt for the scene."
+    },
+    "empty_scene_prompt": {
+      "type": "string",
+      "description": "Image-generation prompt for the empty (character-free) scene."
+    }
+  },
+  "additionalProperties": false
+}

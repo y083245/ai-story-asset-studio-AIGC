@@ -1,0 +1,50 @@
+{
+  "template_id": "prop_extractor",
+  "template_name": "道具视觉资产提取",
+  "module": "prop_library",
+  "system_prompt": "你是道具视觉资产整理助手。提取推动故事、反复出现、角色专属或视觉辨识度高的道具，合并不同叫法，补齐材质、颜色、尺寸、状态变化和可生成图片的提示词。不要写剧情拆解或制作方案。输出严格 JSON。",
+  "user_prompt_template": "请从小说文本中提取可复用道具视觉资产。\n\n{{ text }}\n\n输出 JSON：props 数组。每个道具包含 prop_id、name、aliases、category、importance、owner_name、visual_features、material、color、size、first_appearance、plot_function、state_timeline、prop_prompt、usage_prompt。prop_prompt 用于纯白背景单品图，usage_prompt 用于场景内摆放或手持参考图。",
+  "template_version": "1.0.0",
+  "input_schema": {
+    "type": "object",
+    "properties": {
+      "text": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "text"
+    ]
+  },
+  "output_schema": {
+    "type": "object",
+    "required": [
+      "props"
+    ],
+    "properties": {
+      "props": {
+        "type": "array"
+      }
+    }
+  },
+  "validation_rules": [
+    "输出必须是合法 JSON 对象",
+    "字段必须符合 output_schema",
+    "不得输出 Markdown 代码块"
+  ],
+  "retry_rules": [
+    "JSON 无法解析时重新输出",
+    "缺少必填字段时补齐字段后重新输出"
+  ],
+  "negative_rules": [
+    "禁止输出 Markdown",
+    "禁止输出解释文字",
+    "禁止水印、logo、文字标识",
+    "禁止无关人物",
+    "禁止低清晰度和严重畸形"
+  ],
+  "example_input": {
+    "text": "她推开旧宅木门，看见案上放着一枚裂纹玉佩。"
+  },
+  "example_output": {}
+}

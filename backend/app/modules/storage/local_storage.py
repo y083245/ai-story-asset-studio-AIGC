@@ -1,0 +1,164 @@
+"""Local file-system storage for development and testing.
+
+``LocalFileSystemStorage`` implements the M17 ``ObjectStorageProvider``
+interface and additionally provides ``download``, ``exists``, and
+``download_stream`` methods that the ``StorageService`` uses.
+
+Files are written under ``backend/local_storage/`` by default.
+"""
+
+from __future__ import annotations
+
+import contextlib
+import datetime as _dt
+import os
+import uuid
+from collections.abc import AsyncIterator
+
+from app.modules.provider_adapter.base import (
+    ObjectStorageProvider,
+    StorageUploadRequest,
+    StorageUploadResponse,
+)
+
+
+def _now_iso() -> str:
+    """Return current time as ISO 8601 string (UTC)."""
+    return _dt.datetime.now(_dt.UTC).isoformat()
+
+
+class _LocalFile:
+    """Holder for an uploaded file's metadata + content."""
+
+    __slots__ = ("request", "content")
+
+    def __init__(self, request: StorageUploadRequest) -> None:
+        self.request = request
+        self.content = request.file_bytes
+
+
+class LocalFileSystemStorage(ObjectStorageProvider):
+    """Local-disk object storage for development and automated testing.
+
+    Uploaded files are written to ``{storage_root}/`` mirroring the
+    canonical storage paths produced by ``build_asset_path``.
+
+    This provider implements the full ``ObjectStorageProvider`` contract
+    and adds ``download``, ``exists``, and ``download_stream`` for use
+    by the ``StorageService``.
+    """
+
+    def __init__(self, storage_root: str = "local_storage") -> None:
+        self._storage_root = os.path.realpath(storage_root)
+        # In-memory index: asset_id -> _LocalFile
+        self._index: dict[str, _LocalFile] = {}
+
+    # ------------------------------------------------------------------
+    # ObjectStorageProvider implementation
+    # ------------------------------------------------------------------
+
+    async def upload(self, request: StorageUploadRequest) -> StorageUploadResponse:
+        """Persist file bytes to disk and return a response object."""
+        asset_id = f"local-{uuid.uuid4().hex}"
+        local_file = _LocalFile(request)
+        self._index[asset_id] = local_file
+
+        # Write to disk
+        file_path = self._disk_path(asset_id)
+        os.makedirs(os.path.dirname(file_path), exist_ok=True)
+        with open(file_path, "wb") as fh:
+            fh.write(request.file_bytes)
+
+        url = self._public_url(asset_id)
+        return StorageUploadResponse(
+            asset_id=asset_id,
+            url=url,
+            signed_url=f"{url}?signature=local&expires=3600",
+            expires_at=_now_iso(),
+        )
+
+    async def get_signed_url(self, asset_id: str, expires_seconds: int = 3600) -> str:
+        """Return a local browser-loadable URL with a pretend signature."""
+        self._disk_path(asset_id)
+        return f"{self._public_url(asset_id)}?signature=local&expires={expires_seconds}"
+
+    async def delete(self, asset_id: str) -> None:
+        """Remove the file from disk and index."""
+        self._index.pop(asset_id, None)
+        file_path = self._disk_path(asset_id)
+        with contextlib.suppress(FileNotFoundError):
+            os.remove(file_path)
+
+    # ------------------------------------------------------------------
+    # Extended methods (beyond ObjectStorageProvider)
+    # ------------------------------------------------------------------
+
+    async def download(self, asset_id: str) -> bytes:
+        """Return the full file bytes for *asset_id*.
+
+        Raises ``FileNotFoundError`` if the asset does not exist.
+        """
+        if asset_id in self._index:
+            return self._index[asset_id].content
+
+        file_path = self._disk_path(asset_id)
+        try:
+            with open(file_path, "rb") as fh:
+                return fh.read()
+        except FileNotFoundError as exc:
+            raise FileNotFoundError(f"Asset '{asset_id}' not found in local storage") from exc
+
+    async def exists(self, asset_id: str) -> bool:
+        """Return ``True`` if the asset exists in the local store."""
+        return asset_id in self._index or os.path.exists(self._disk_path(asset_id))
+
+    async def download_stream(self, asset_id: str) -> AsyncIterator[bytes]:
+        """Stream file content in chunks (simulated for local storage).
+
+        For local storage this reads the whole file and yields it in one
+        chunk; in production this would stream from TOS.
+        """
+        content = await self.download(asset_id)
+        yield content
+
+    # ------------------------------------------------------------------
+    # StorageService integration (non-interface methods)
+    # ------------------------------------------------------------------
+
+    async def _upload_with_asset_id(self, request: StorageUploadRequest, asset_id: str) -> StorageUploadResponse:
+        """Upload bytes using a caller-chosen *asset_id* (canonical path).
+
+        This is used by ``StorageService`` so the asset_id matches the
+        canonical path generated by ``build_asset_path``.
+        """
+        local_file = _LocalFile(request)
+        self._index[asset_id] = local_file
+
+        file_path = self._disk_path(asset_id)
+        os.makedirs(os.path.dirname(file_path), exist_ok=True)
+        with open(file_path, "wb") as fh:
+            fh.write(request.file_bytes)
+
+        url = self._public_url(asset_id)
+        return StorageUploadResponse(
+            asset_id=asset_id,
+            url=url,
+            signed_url=f"{url}?signature=local&expires=3600",
+            expires_at=_now_iso(),
+        )
+
+    # ------------------------------------------------------------------
+    # Helpers
+    # ------------------------------------------------------------------
+
+    def _disk_path(self, asset_id: str) -> str:
+        """Return the absolute on-disk path for an asset id."""
+        candidate = os.path.realpath(os.path.join(self._storage_root, asset_id))
+        if os.path.commonpath([self._storage_root, candidate]) != self._storage_root:
+            raise ValueError(f"Asset path is outside storage root: {asset_id}")
+        return candidate
+
+    def _public_url(self, asset_id: str) -> str:
+        """Return the browser-facing URL served by FastAPI StaticFiles."""
+        public_path = asset_id.replace(os.sep, "/").lstrip("/")
+        return f"/local-storage/{public_path}"

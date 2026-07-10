@@ -1,0 +1,55 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+allowed_md_re='^(README|readme|CLAUDE|Claude)\.md$'
+sensitive_path_re='(^|/)(\.env|local_config|local_storage|model-providers\.json|output|\.codex)(/|$)|api[ _-]*key|apikey|secret|token|credential|password|\.pem$|\.key$|\.p8$|\.p12$'
+secret_value_re='(sk-[A-Za-z0-9_-]{20,}|gh[opsu]_[A-Za-z0-9_]{20,}|github_pat_[A-Za-z0-9_]{20,}|AIza[0-9A-Za-z_-]{20,}|AKIA[0-9A-Z]{16}|xox[baprs]-[A-Za-z0-9-]{20,})'
+
+failed=0
+
+check_ref() {
+  local sha="$1"
+  local ref="$2"
+
+  if [ "$sha" = "0000000000000000000000000000000000000000" ]; then
+    return 0
+  fi
+
+  local bad_md
+  bad_md="$(git ls-tree -r --name-only "$sha" | awk -v allowed="$allowed_md_re" '
+    BEGIN { bad = 0 }
+    /\.md$|\.MD$/ {
+      if ($0 !~ allowed) {
+        print $0
+        bad = 1
+      }
+    }
+    END { exit bad }
+  ')" || {
+    echo "pre-push blocked: $ref contains forbidden Markdown files."
+    echo "$bad_md" | sed 's/^/  - /'
+    failed=1
+  }
+
+  local bad_paths
+  bad_paths="$(git ls-tree -r --name-only "$sha" | grep -Ei "$sensitive_path_re" || true)"
+  if [ -n "$bad_paths" ]; then
+    echo "pre-push blocked: $ref contains sensitive-looking paths."
+    echo "$bad_paths" | sed 's/^/  - /'
+    failed=1
+  fi
+
+  if git grep -I -q -E "$secret_value_re" "$sha"; then
+    echo "pre-push blocked: $ref contains secret-looking values."
+    failed=1
+  fi
+}
+
+while read -r local_ref local_sha remote_ref remote_sha; do
+  check_ref "$local_sha" "$local_ref"
+done
+
+if [ "$failed" -ne 0 ]; then
+  echo "Push rejected. Remove forbidden files or secrets before pushing."
+  exit 1
+fi

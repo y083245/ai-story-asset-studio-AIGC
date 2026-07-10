@@ -1,0 +1,48 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://story-asset-studio.dev/schemas/novel.schema.json",
+  "title": "Novel",
+  "description": "Uploaded and preprocessed novel content.",
+  "type": "object",
+  "required": ["novel_id", "clean_text", "word_count"],
+  "properties": {
+    "novel_id": {
+      "type": "string",
+      "description": "Unique novel identifier (UUID)."
+    },
+    "clean_text": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Cleaned full text of the novel."
+    },
+    "word_count": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Total word count of the clean text."
+    },
+    "chapter_list": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Ordered list of chapter titles or identifiers."
+    },
+    "paragraph_list": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Ordered list of paragraphs."
+    },
+    "text_chunks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["chunk_index", "text"],
+        "properties": {
+          "chunk_index": { "type": "integer", "minimum": 0 },
+          "text": { "type": "string" }
+        },
+        "additionalProperties": false
+      },
+      "description": "Semantic chunks for LLM processing."
+    }
+  },
+  "additionalProperties": false
+}

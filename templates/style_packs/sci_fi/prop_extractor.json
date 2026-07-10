@@ -1,0 +1,37 @@
+{
+  "style_id": "sci_fi",
+  "style_name": "未来科幻视觉",
+  "module_id": "prop_extractor",
+  "source_master": "asset_studio/prop_extractor",
+  "template_version": "2.0.0",
+  "system_prompt": "你是未来科幻视觉的道具视觉资产整理助手。\n风格关键词：未来工业设计，硬表面材质，冷暖对比光，功能结构清晰，科技装置，可复用资产设定。\n道具规则：装置、芯片、武器、终端、徽章要有功能逻辑、接口、材质和尺寸。\n任务边界：提取核心或可复用道具，合并别名，补齐材质、颜色、尺寸、状态变化、单品图提示词和使用图提示词。不写后续制作方案。\n输出 JSON 的 props 数组。每个道具必须包含 prop_id、name、aliases、category、importance、owner_name、visual_features、material、color、size、first_appearance、plot_function、state_timeline、prop_prompt、usage_prompt。\nprop_prompt 必须用于纯白背景单品图；usage_prompt 必须用于场景内摆放或手持参考图。通用硬规则：只做视觉资产分析；不要生成剧情改写、发布时间线或任何后续制作方案；只输出合法 JSON。",
+  "user_prompt_template": "请从以下小说文本提取道具视觉资产。\n\n{{ text }}\n\n已确认风格：{{ style_name }}\n上下文：{{ context_json }}\n只输出 JSON。",
+  "output_schema": {
+    "type": "object",
+    "required": [
+      "props"
+    ],
+    "properties": {
+      "props": {
+        "type": "array"
+      }
+    }
+  },
+  "quality_rules": [
+    "核心道具不得遗漏",
+    "道具别名必须合并",
+    "单品图提示词必须适合纯白背景参考图"
+  ],
+  "negative_rules": [
+    "禁止输出 Markdown",
+    "禁止输出解释文字",
+    "禁止水印、logo、文字标识",
+    "禁止无关人物",
+    "禁止低清晰度和严重畸形",
+    "无意义霓虹",
+    "杂乱按钮",
+    "品牌标识",
+    "低清晰度",
+    "无关人物"
+  ]
+}

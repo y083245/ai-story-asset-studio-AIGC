@@ -1,0 +1,66 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://story-asset-studio.dev/schemas/asset.schema.json",
+  "title": "Asset",
+  "description": "A generated or uploaded image asset.",
+  "type": "object",
+  "required": [
+    "asset_id",
+    "project_id",
+    "asset_type",
+    "asset_url",
+    "status",
+    "created_at"
+  ],
+  "properties": {
+    "asset_id": {
+      "type": "string",
+      "description": "UUID string."
+    },
+    "project_id": {
+      "type": "string",
+      "description": "UUID string."
+    },
+    "asset_type": {
+      "type": "string",
+      "enum": [
+        "character_front",
+        "character_turnaround",
+        "character_expression",
+        "scene_empty",
+        "prop_product",
+        "prop_usage"
+      ]
+    },
+    "asset_url": {
+      "type": "string"
+    },
+    "thumbnail_url": {
+      "type": "string"
+    },
+    "related_id": {
+      "type": "string",
+      "description": "Related character_id, scene_id, or prop_id."
+    },
+    "model_name": {
+      "type": "string"
+    },
+    "prompt": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "generating",
+        "completed",
+        "failed"
+      ]
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "additionalProperties": false
+}

@@ -1,0 +1,71 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+.venv/
+venv/
+*.egg
+
+# Environment
+.env
+.env.local
+.env.*.local
+local_config/
+
+# Local runtime artifacts
+backend/local_storage/
+.playwright-cli/
+.ruff_cache/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Docker
+docker/data/
+
+# Frontend
+frontend/node_modules/
+frontend/.next/
+frontend/out/
+
+# Alembic
+backend/alembic/versions/*.pyc
+
+# Test
+.pytest_cache/
+htmlcov/
+.coverage
+coverage.xml
+
+# Markdown documents
+*.md
+*.MD
+!/README.md
+!/readme.md
+!/CLAUDE.md
+!/Claude.md
+
+# Local agent/runtime artifacts
+.codex/
+docs/superpowers/
+
+# Sensitive files and secret-bearing local notes
+*api*key*
+*apikey*
+*secret*
+*token*
+*credential*
+*password*
+*.pem
+*.key
+*.p8
+*.p12

@@ -1,0 +1,84 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: story-asset-postgres
+    environment:
+      POSTGRES_USER: storyasset
+      POSTGRES_PASSWORD: storyasset
+      POSTGRES_DB: storyasset
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U storyasset"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    container_name: story-asset-redis
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build:
+      context: ..
+      dockerfile: backend/Dockerfile
+    container_name: story-asset-backend
+    env_file:
+      - ../.env
+    environment:
+      DATABASE_URL: postgresql+asyncpg://storyasset:storyasset@postgres:5432/storyasset
+      DATABASE_URL_SYNC: postgresql://storyasset:storyasset@postgres:5432/storyasset
+      REDIS_URL: redis://redis:6379/0
+      CORS_ALLOWED_ORIGINS: ${CORS_ALLOWED_ORIGINS:-http://localhost:3000,http://127.0.0.1:3000}
+    command: >
+      sh -c "alembic upgrade head && uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload --timeout-keep-alive 120 --timeout-graceful-shutdown 120"
+    ports:
+      - "0.0.0.0:8000:8000"
+    volumes:
+      - ../local_config:/app/local_config
+      - ../backend/local_storage:/app/local_storage
+      - ../backend/app:/app/app
+      - ../backend/alembic:/app/alembic
+      - ../backend/alembic.ini:/app/alembic.ini
+      - ../backend/pyproject.toml:/app/pyproject.toml
+      - ../templates:/app/templates
+      - ../docs:/app/docs:ro
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8000/health || exit 1"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  frontend:
+    build:
+      context: ../frontend
+      dockerfile: Dockerfile
+      args:
+        NEXT_PUBLIC_API_URL: ""
+        INTERNAL_API_URL: http://backend:8000
+    container_name: story-asset-frontend
+    environment:
+      HOSTNAME: 0.0.0.0
+      PORT: 3000
+    ports:
+      - "0.0.0.0:3000:3000"
+    depends_on:
+      backend:
+        condition: service_healthy
+
+volumes:
+  pgdata:

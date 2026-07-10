@@ -1,0 +1,94 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://story-asset-studio.dev/schemas/story_bible.schema.json",
+  "title": "Story Bible",
+  "description": "Unified visual reference document for generated assets.",
+  "type": "object",
+  "required": [
+    "project_id",
+    "title",
+    "genre",
+    "visual_style",
+    "story_summary",
+    "main_conflict",
+    "emotional_tone",
+    "world_setting",
+    "time_period",
+    "color_palette",
+    "composition_language",
+    "characters",
+    "scenes",
+    "props",
+    "negative_prompt_rules"
+  ],
+  "properties": {
+    "project_id": {
+      "type": "string"
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1
+    },
+    "genre": {
+      "type": "string"
+    },
+    "visual_style": {
+      "type": "string"
+    },
+    "aspect_ratio": {
+      "type": "string"
+    },
+    "story_summary": {
+      "type": "string"
+    },
+    "main_conflict": {
+      "type": "string"
+    },
+    "emotional_tone": {
+      "type": "string"
+    },
+    "world_setting": {
+      "type": "string"
+    },
+    "time_period": {
+      "type": "string"
+    },
+    "color_palette": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "composition_language": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "characters": {
+      "type": "array",
+      "items": {
+        "$ref": "character.schema.json"
+      }
+    },
+    "scenes": {
+      "type": "array",
+      "items": {
+        "$ref": "scene.schema.json"
+      }
+    },
+    "props": {
+      "type": "array",
+      "items": {
+        "$ref": "prop.schema.json"
+      }
+    },
+    "negative_prompt_rules": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "additionalProperties": false
+}

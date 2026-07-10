@@ -1,0 +1,60 @@
+name: Fresh Docker Smoke
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+
+jobs:
+  fresh-docker-smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Prepare environment
+        run: cp .env.example .env
+
+      - name: Validate Docker Compose config
+        run: docker compose -f docker/docker-compose.yml config --quiet
+
+      - name: Build Docker images
+        run: docker compose -f docker/docker-compose.yml build backend frontend
+
+      - name: Start stack
+        run: docker compose -f docker/docker-compose.yml up -d
+
+      - name: Wait for backend health
+        run: |
+          for i in {1..90}; do
+            if curl -fsS http://127.0.0.1:8000/health; then
+              exit 0
+            fi
+            sleep 2
+          done
+          docker compose -f docker/docker-compose.yml logs backend
+          exit 1
+
+      - name: Verify frontend responds
+        run: |
+          for i in {1..60}; do
+            if curl -fsS http://127.0.0.1:3000 >/tmp/story-asset-frontend.html; then
+              exit 0
+            fi
+            sleep 2
+          done
+          docker compose -f docker/docker-compose.yml logs frontend
+          exit 1
+
+      - name: Show container state on failure
+        if: failure()
+        run: |
+          docker compose -f docker/docker-compose.yml ps
+          docker compose -f docker/docker-compose.yml logs backend frontend
+
+      - name: Cleanup
+        if: always()
+        run: docker compose -f docker/docker-compose.yml down -v --remove-orphans

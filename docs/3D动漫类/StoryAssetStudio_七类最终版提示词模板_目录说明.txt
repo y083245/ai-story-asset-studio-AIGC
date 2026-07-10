@@ -1,0 +1,26 @@
+Story Asset Studio 七类最终版提示词模板目录说明
+
+本压缩包包含 7 份最终补齐版风格包：
+1. 古风仙侠类_3D动漫版_高质量提示词模板.txt
+2. 赛博朋克类_3D动漫版_高质量提示词模板.txt
+3. 未来科幻电影类_3D动漫版_高质量提示词模板.txt
+4. 真人电影级_3D动漫版_高质量提示词模板.txt
+5. 中国古风_3D动漫版_高质量提示词模板.txt
+6. 3D都市剧情类动漫风_高质量提示词模板.txt
+7. 都市剧情类真人写实风_高质量提示词模板.txt
+
+每份文件均按 Story Asset Studio 的资产图链路组织：
+- 题材识别 detect_genre
+- 角色提取 extract_characters
+- 角色生图 image_asset.character
+- 角色三视图 character_turnaround
+- 场景提取 extract_scenes
+- 场景生图 image_asset.scene
+- 道具提取 extract_props
+- 道具生图 image_asset.prop
+- 图片质检 check_image_quality
+- 失败重试 Patch quality_retry.auto_fix_image
+- 统一负面提示词
+- 快速调用格式
+
+注意：这些模板只覆盖视觉资产图，不包含分镜、视频、剪辑、时间轴等后续影视制作流程。

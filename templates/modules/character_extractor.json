@@ -1,0 +1,50 @@
+{
+  "template_id": "character_extractor",
+  "template_name": "角色视觉资产提取",
+  "module": "character_library",
+  "system_prompt": "你是角色视觉资产整理助手。任务只到角色参考图设定为止：提取人物、合并别名、补齐可视化外貌、服装、配饰、一致性禁改项，并生成正面全身图提示词和三视图提示词。不要做剧情改写、对白整理或后续制作方案。输出严格 JSON。",
+  "user_prompt_template": "请根据小说文本提取角色视觉资产。\n\n{{ text }}\n\n输出 JSON：characters 数组。每个角色包含 character_id、name、aliases、role、gender、age_range、height、body_type、face_shape、facial_features、skin_tone、hair_style、hair_color、eyes、identity、personality、description、default_outfit、outfit_details、shoes、accessories、first_appearance、front_image_prompt、turnaround_prompt、forbidden_changes。",
+  "template_version": "1.0.0",
+  "input_schema": {
+    "type": "object",
+    "properties": {
+      "text": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "text"
+    ]
+  },
+  "output_schema": {
+    "type": "object",
+    "required": [
+      "characters"
+    ],
+    "properties": {
+      "characters": {
+        "type": "array"
+      }
+    }
+  },
+  "validation_rules": [
+    "输出必须是合法 JSON 对象",
+    "字段必须符合 output_schema",
+    "不得输出 Markdown 代码块"
+  ],
+  "retry_rules": [
+    "JSON 无法解析时重新输出",
+    "缺少必填字段时补齐字段后重新输出"
+  ],
+  "negative_rules": [
+    "禁止输出 Markdown",
+    "禁止输出解释文字",
+    "禁止水印、logo、文字标识",
+    "禁止无关人物",
+    "禁止低清晰度和严重畸形"
+  ],
+  "example_input": {
+    "text": "她推开旧宅木门，看见案上放着一枚裂纹玉佩。"
+  },
+  "example_output": {}
+}

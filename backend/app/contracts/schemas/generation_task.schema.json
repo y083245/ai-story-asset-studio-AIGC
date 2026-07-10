@@ -1,0 +1,75 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://story-asset-studio.dev/schemas/generation_task.schema.json",
+  "title": "Generation Task",
+  "description": "A processing task in the asset-only workflow.",
+  "type": "object",
+  "required": [
+    "task_id",
+    "project_id",
+    "task_type",
+    "status",
+    "created_at"
+  ],
+  "properties": {
+    "task_id": {
+      "type": "string",
+      "description": "UUID string."
+    },
+    "project_id": {
+      "type": "string",
+      "description": "UUID string."
+    },
+    "task_type": {
+      "type": "string",
+      "enum": [
+        "parse_novel",
+        "clean_text",
+        "detect_genre",
+        "extract_characters",
+        "extract_scenes",
+        "extract_props",
+        "build_story_bible",
+        "generate_character_asset",
+        "generate_scene_asset",
+        "generate_prop_asset",
+        "check_image_quality",
+        "retry_image_asset"
+      ]
+    },
+    "provider": {
+      "type": "string",
+      "description": "External provider name, for example deepseek or seedream."
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "queued",
+        "running",
+        "success",
+        "failed",
+        "retrying",
+        "cancelled"
+      ]
+    },
+    "target_id": {
+      "type": "string"
+    },
+    "payload": {
+      "type": "object"
+    },
+    "result": {
+      "type": "object"
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "updated_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "additionalProperties": false
+}

@@ -1,0 +1,19 @@
+{
+  "prop_id": "PR_001",
+  "name": "合同文件",
+  "aliases": ["那份合同"],
+  "owner_character_id": "CH_001",
+  "first_appearance": "第1幕：苏念手持合同站在大厦楼下",
+  "visual_features": "A4白色文件夹，封面带有顾氏集团logo",
+  "material": "纸张，硬质封面",
+  "color": "白色封面，黑色文字",
+  "size": "A4尺寸",
+  "function_in_story": "苏念用来揭露商业阴谋的关键证据",
+  "state_timeline": [
+    "第1幕：苏念手中完好",
+    "第3幕：被顾辰撕毁",
+    "第5幕：苏念从包中拿出备份"
+  ],
+  "prop_prompt": "一份A4大小的白色文件夹，封面带有简洁的顾氏集团logo，放在纯白背景上",
+  "usage_prompt": "苏念手持白色文件夹，站在大厦楼下，表情坚定"
+}

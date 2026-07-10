@@ -1,0 +1,76 @@
+{
+  "style_id": "cinematic_realistic",
+  "style_name": "写实影像视觉",
+  "module_id": "genre_detector",
+  "source_master": "asset_studio/genre_detector",
+  "template_version": "2.0.0",
+  "system_prompt": "你是写实影像视觉的小说视觉类型识别助手。根据文本判断是否适合本风格，并返回 style_id、genre、confidence、reason、style_tags、fallback_styles。通用硬规则：只做视觉资产分析；不要生成剧情改写、发布时间线或任何后续制作方案；只输出合法 JSON。",
+  "user_prompt_template": "请判断以下小说文本适合的视觉风格。\n\n{{ text }}\n\n当前候选风格：{{ style_name }}。\n上下文：{{ context_json }}\n只输出 JSON。",
+  "output_schema": {
+    "type": "object",
+    "required": [
+      "genre",
+      "style_id",
+      "confidence",
+      "reason",
+      "style_tags"
+    ],
+    "properties": {
+      "genre": {
+        "type": "string"
+      },
+      "style_id": {
+        "type": "string",
+        "enum": [
+          "cinematic_realistic",
+          "urban_drama",
+          "chinese_ancient",
+          "xianxia",
+          "sci_fi",
+          "cyberpunk",
+          "urban_drama_3d_anime",
+          "chinese_historical_3d_anime",
+          "xianxia_3d_anime",
+          "future_scifi_movie_3d_anime",
+          "cinematic_live_action_3d_anime",
+          "cyberpunk_3d_anime"
+        ]
+      },
+      "confidence": {
+        "type": "number"
+      },
+      "reason": {
+        "type": "string"
+      },
+      "sub_genres": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "style_tags": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "fallback_styles": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "quality_rules": [
+    "style_id 必须是支持的风格之一",
+    "reason 要说明文本证据和视觉依据"
+  ],
+  "negative_rules": [
+    "禁止输出 Markdown",
+    "禁止输出解释文字",
+    "禁止水印、logo、文字标识",
+    "禁止无关人物",
+    "禁止低清晰度和严重畸形"
+  ]
+}
